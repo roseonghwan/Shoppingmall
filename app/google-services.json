@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "544116411179",
+    "firebase_url": "https://mobileprogrammginshoppingmall.firebaseio.com",
+    "project_id": "mobileprogrammginshoppingmall",
+    "storage_bucket": "mobileprogrammginshoppingmall.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:544116411179:android:5e88abe5e9d3d3f9be136e",
+        "android_client_info": {
+          "package_name": "com.example.shoppingmall"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "544116411179-dsnmq2no4k8gb9fgfjhq2o02of2nh3gn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwyY5vuVHdJRtGYJ57xblOgWIdMwytQMs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "544116411179-dsnmq2no4k8gb9fgfjhq2o02of2nh3gn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
