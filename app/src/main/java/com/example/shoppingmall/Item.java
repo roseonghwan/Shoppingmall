@@ -1,11 +1,19 @@
-package com.example.shoppingmall.Home;
+package com.example.shoppingmall;
+
+import java.io.Serializable;
 
 // 상품 정보를 담은 클래스
-public class Item {
+public class Item implements Serializable {
     private String image, name;
     private int price;
 
     public Item(){}
+
+    public Item(String image, String name, int price){
+        this.image = image;
+        this.name = name;
+        this.price = price;
+    }
 
 
     // 각 변수에 대한 getter, setter

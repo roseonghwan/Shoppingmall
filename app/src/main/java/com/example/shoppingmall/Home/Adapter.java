@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.shoppingmall.Item;
 import com.example.shoppingmall.Payment.PaymentActivity;
 import com.example.shoppingmall.R;
 import com.example.shoppingmall.ShoppingBasket.ShoppingBasketActivity;
@@ -78,6 +79,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
                 // 다이얼로그 띄우는 메서드
                 private void popup() {
                     final int pos = getAdapterPosition(); // 클릭한 아이템 위치
+                    final Item item = new Item(arrayList.get(pos).getImage(),arrayList.get(pos).getName(),arrayList.get(pos).getPrice());
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     builder.setTitle("상품 선택");
                     builder.setMessage("상품을 선택하셨습니다. 어디로 이동하시겠습니까?");
@@ -85,17 +87,17 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             Intent intent = new Intent(context, ShoppingBasketActivity.class);
-                            intent.putExtra("name", arrayList.get(pos).getName());
-                            intent.putExtra("price", arrayList.get(pos).getPrice());
-                            intent.putExtra("image", arrayList.get(pos).getImage());
+                            // 클릭한 아이템의 객체를 전송
+                            intent.putExtra("item",item);
                             context.startActivity(intent);
-                            Toast.makeText(context,arrayList.get(pos).getName(),Toast.LENGTH_SHORT).show();
                         }
                     });
                     builder.setNegativeButton("결제", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             Intent intent = new Intent(context, PaymentActivity.class);
+                            // 클릭한 아이템의 객체를 전송
+                            intent.putExtra("item",item);
                             context.startActivity(intent);
                         }
                     });

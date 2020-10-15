@@ -7,31 +7,47 @@
     android:orientation="vertical"
     tools:context=".ShoppingBasket.ShoppingBasketActivity">
 
-    <ListView
-        android:id="@+id/list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-
-    <LinearLayout
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:background="#000000">
 
         <Button
             android:id="@+id/btn_home"
             android:layout_width="100dp"
             android:layout_height="50dp"
-            android:text="홈" />
+            android:background="#000000"
+            android:text="홈"
+            android:textColor="#FFFFFF"
+            android:textSize="17dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="장바구니"
+            android:textColor="#FFFFFF"
+            android:textSize="25dp"
+            android:layout_gravity="center"/>
 
         <Button
             android:id="@+id/btn_payment"
             android:layout_width="100dp"
             android:layout_height="50dp"
-            android:layout_marginLeft="210dp"
+            android:layout_gravity="right"
+            android:background="#000000"
+            android:textColor="#FFFFFF"
+            android:textSize="17dp"
+            android:layout_marginRight="20dp"
             android:text="결제" />
 
-    </LinearLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 
 </LinearLayout>
