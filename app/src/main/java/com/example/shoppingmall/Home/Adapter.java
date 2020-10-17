@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,13 @@ import com.example.shoppingmall.Item;
 import com.example.shoppingmall.Payment.PaymentActivity;
 import com.example.shoppingmall.R;
 import com.example.shoppingmall.ShoppingBasket.ShoppingBasketActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -79,28 +87,38 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
                 // 다이얼로그 띄우는 메서드
                 private void popup() {
                     final int pos = getAdapterPosition(); // 클릭한 아이템 위치
-                    final Item item = new Item(arrayList.get(pos).getImage(),arrayList.get(pos).getName(),arrayList.get(pos).getPrice());
+                    final Item item = new Item(arrayList.get(pos).getImage(), arrayList.get(pos).getName(), arrayList.get(pos).getPrice(), arrayList.get(pos).isCheck());
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     builder.setTitle("상품 선택");
                     builder.setMessage("상품을 선택하셨습니다. 어디로 이동하시겠습니까?");
+
+                    // 장바구니 버튼 클릭 시 장바구니 품목으로 이동
                     builder.setPositiveButton("장바구니", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             Intent intent = new Intent(context, ShoppingBasketActivity.class);
-                            // 클릭한 아이템의 객체를 전송
-                            intent.putExtra("item",item);
+                            FirebaseFirestore db = FirebaseFirestore.getInstance(); // firestore 초기화
+                            db.collection("basket")
+                                    .add(item);
                             context.startActivity(intent);
                         }
                     });
+
+                    // 결제 버튼을 클릭 시 해당 품목만 바로 결제창으로 이동
                     builder.setNegativeButton("결제", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             Intent intent = new Intent(context, PaymentActivity.class);
-                            // 클릭한 아이템의 객체를 전송
-                            intent.putExtra("item",item);
+                            final FirebaseFirestore db = FirebaseFirestore.getInstance(); // firestore 초기화
+
+                            // 결제 목록에 추가
+                            db.collection("payment")
+                                    .add(item);
                             context.startActivity(intent);
                         }
                     });
+
+                    // 취소 버튼을 클릭 시 다이얼로그 닫힘
                     builder.setNeutralButton("취소", null);
 
                     AlertDialog alertDialog = builder.create();

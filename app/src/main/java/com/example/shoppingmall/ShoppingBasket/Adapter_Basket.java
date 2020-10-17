@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -37,8 +38,17 @@ public class Adapter_Basket extends RecyclerView.Adapter<Adapter_Basket.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        // 어댑터로 전송된 이미지, 텍스트를 로드해서 넣어줌
+    // 어댑터로 전송된 이미지, 텍스트를 로드해서 넣어줌
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+
+        // 장바구니에서 체크박스에 체크가 되면 체크 속성값을 바꿈
+        holder.check.setOnClickListener(new CheckBox.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                arrayList.get(position).setCheck(((CheckBox)view).isChecked());
+
+            }
+        });
         Glide.with(holder.itemView)
                 .load(arrayList.get(position).getImage())
                 .into(holder.iv_image);
@@ -54,11 +64,12 @@ public class Adapter_Basket extends RecyclerView.Adapter<Adapter_Basket.ViewHold
     // list_item에 있는 것들을 불러옴
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView iv_image;
+        CheckBox check;
         TextView tv_name, tv_price;
 
         public ViewHolder(@NonNull final View itemView) {
             super(itemView);
-
+            this.check = itemView.findViewById(R.id.check);
             this.iv_image = itemView.findViewById(R.id.iv_image);
             this.tv_name = itemView.findViewById(R.id.tv_name);
             this.tv_price = itemView.findViewById(R.id.tv_price);
