@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,6 +12,29 @@
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:id="@+id/hidden"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_basket"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:text="장바구니"/>
+
+
+        <Button
+            android:layout_gravity="end"
+            android:id="@+id/btn_payment"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="210dp"
+            android:text="결제"/>
+    </LinearLayout>
 
 
 </RelativeLayout>

@@ -4,13 +4,12 @@ import java.io.Serializable;
 
 // 상품 정보를 담은 클래스
 public class Item implements Serializable {
-    private String image, name;
-    private int price;
+    private String image, name, price;
     private boolean check;
 
     public Item(){}
 
-    public Item(String image, String name, int price, boolean check){
+    public Item(String image, String name, String price, boolean check){
         this.image = image;
         this.name = name;
         this.price = price;
@@ -35,11 +34,11 @@ public class Item implements Serializable {
         this.name = name;
     }
 
-    public int getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 

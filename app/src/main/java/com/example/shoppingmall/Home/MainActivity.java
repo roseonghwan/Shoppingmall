@@ -7,6 +7,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.example.shoppingmall.Item;
 import com.example.shoppingmall.R;
@@ -26,12 +29,20 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Item> arrayList;
     private FirebaseDatabase database;
     private DatabaseReference reference;
+    // adapter에서 접근하기 위한 선언
+    public static LinearLayout linearLayout;
+    public static Button btn_basket, btn_payment;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        linearLayout = (LinearLayout)findViewById(R.id.hidden);
+        linearLayout.setVisibility(View.GONE);
+        btn_basket = (Button)findViewById(R.id.btn_basket);
+        btn_payment = (Button)findViewById(R.id.btn_payment);
 
         recyclerView = findViewById(R.id.recyclerview);
         recyclerView.setHasFixedSize(true);

@@ -8,10 +8,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
+import android.widget.TextView;
+
+import android.os.Handler;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,15 +22,16 @@ import com.example.shoppingmall.Item;
 import com.example.shoppingmall.Payment.PaymentActivity;
 import com.example.shoppingmall.R;
 import com.example.shoppingmall.ShoppingBasket.ShoppingBasketActivity;
+
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+
 import java.util.ArrayList;
+
 
 // 리사이클러 뷰를 구현하기 위한 어댑터
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
@@ -69,6 +72,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView iv_image;
         TextView tv_name, tv_price;
+        Button btn_basket, btn_payment;
 
         public ViewHolder(@NonNull final View itemView) {
             super(itemView);
@@ -77,54 +81,65 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             this.tv_name = itemView.findViewById(R.id.tv_name);
             this.tv_price = itemView.findViewById(R.id.tv_price);
 
+            // 홈에서 품목을 클릭했을 시 이벤트
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // 상품을 선택했을 때 이동할 창으로 가기 위한 다이얼로그 띄우기
-                    popup();
-                }
-
-                // 다이얼로그 띄우는 메서드
-                private void popup() {
                     final int pos = getAdapterPosition(); // 클릭한 아이템 위치
                     final Item item = new Item(arrayList.get(pos).getImage(), arrayList.get(pos).getName(), arrayList.get(pos).getPrice(), arrayList.get(pos).isCheck());
-                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    builder.setTitle("상품 선택");
-                    builder.setMessage("상품을 선택하셨습니다. 어디로 이동하시겠습니까?");
 
-                    // 장바구니 버튼 클릭 시 장바구니 품목으로 이동
-                    builder.setPositiveButton("장바구니", new DialogInterface.OnClickListener() {
+                    // 상품을 선택했을 때 아래 버튼 등장
+                    MainActivity.linearLayout.setVisibility(View.VISIBLE);
+
+                    // 장바구니를 클릭한 경우
+                    MainActivity.btn_basket.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
+                        public void onClick(View view) {
                             Intent intent = new Intent(context, ShoppingBasketActivity.class);
-                            FirebaseFirestore db = FirebaseFirestore.getInstance(); // firestore 초기화
+                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+                            // firestore 장바구니 데이터에 저장
                             db.collection("basket")
                                     .add(item);
                             context.startActivity(intent);
                         }
                     });
 
-                    // 결제 버튼을 클릭 시 해당 품목만 바로 결제창으로 이동
-                    builder.setNegativeButton("결제", new DialogInterface.OnClickListener() {
+                    // 해당 품목 결제를 클릭한 경우
+                    MainActivity.btn_payment.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent intent = new Intent(context, PaymentActivity.class);
-                            final FirebaseFirestore db = FirebaseFirestore.getInstance(); // firestore 초기화
+                        public void onClick(View view) {
+                            final Intent intent = new Intent(context, PaymentActivity.class);
+                            final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-                            // 결제 목록에 추가
+                            // 결제 목록 전체 삭제(해당 품목만 구입해야 하므로)
                             db.collection("payment")
-                                    .add(item);
-                            context.startActivity(intent);
+                                    .get()
+                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                for (QueryDocumentSnapshot documnet : task.getResult()) {
+                                                    db.collection("payment").document(documnet.getId())
+                                                            .delete();
+                                                }
+                                            }
+                                        }
+                                    });
+
+                            // firebstore 결제 데이터에 추가
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    db.collection("payment")
+                                            .add(item);
+                                    context.startActivity(intent);
+                                }
+                            },1000);
+
                         }
                     });
-
-                    // 취소 버튼을 클릭 시 다이얼로그 닫힘
-                    builder.setNeutralButton("취소", null);
-
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.show();
                 }
-
             });
         }
 

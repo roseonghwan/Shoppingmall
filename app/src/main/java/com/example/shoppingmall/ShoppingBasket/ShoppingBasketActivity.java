@@ -8,11 +8,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 
 import android.widget.Button;
-import android.widget.CheckBox;
 
 
 import com.example.shoppingmall.Home.MainActivity;
@@ -20,7 +18,6 @@ import com.example.shoppingmall.Item;
 import com.example.shoppingmall.Payment.PaymentActivity;
 import com.example.shoppingmall.R;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -42,17 +39,12 @@ public class ShoppingBasketActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping_basket);
 
-        // Item 객체를 전달 받음
-        /*Intent intent = getIntent();
-        Item item = (Item) intent.getSerializableExtra("item");
-        Log.d("인텐트 전달 성공?!?!", item.getName());
-*/
-        db = FirebaseFirestore.getInstance();
+        db = FirebaseFirestore.getInstance(); // 데이터베이스 초기화
         Button btn_home, btn_payment;
 
         arrayList = new ArrayList<>(); // Item 객체들을 담기 위한 arrayList(어댑터로 전송)
 
-        // firestore에서 받아옴
+        // firestore에서 데이터 받아옴
         db.collection("basket")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -60,14 +52,14 @@ public class ShoppingBasketActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()){
                             for(QueryDocumentSnapshot document : task.getResult()){
-                                arrayList.add(new Item(document.get("image").toString(), document.get("name").toString(),Integer.parseInt(document.get("price").toString()),Boolean.parseBoolean(document.get("check").toString())));
+                                arrayList.add(new Item(document.get("image").toString(), document.get("name").toString(),document.get("price").toString(),Boolean.parseBoolean(document.get("check").toString())));
                             }
                         }
                     }
                 });
 
 
-        // 파이어스토어에서 데이터를
+        // 파이어스토어에서 데이터를 받아올 시간을 벌어줌
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -103,12 +95,17 @@ public class ShoppingBasketActivity extends AppCompatActivity {
             public void onClick(View view) {
                 db = FirebaseFirestore.getInstance();
                 Intent intent = new Intent(ShoppingBasketActivity.this, PaymentActivity.class);
+
+
+                // 장바구니에서 고른 품목을 payment 데이터에 저장
                 for (int i=0; i < arrayList.size(); i++){
                     if (arrayList.get(i).isCheck() == true){
                         db.collection("payment")
                                 .add(arrayList.get(i));
                     }
                 }
+
+
                 // 구입할 물건을 체크한 후 결제로 이동하면 장바구니 모두 삭제
                 db.collection("basket")
                         .get()
@@ -126,7 +123,6 @@ public class ShoppingBasketActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
 
     }
 }
