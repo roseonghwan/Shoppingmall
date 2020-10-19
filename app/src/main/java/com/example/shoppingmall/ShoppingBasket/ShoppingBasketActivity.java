@@ -72,7 +72,7 @@ public class ShoppingBasketActivity extends AppCompatActivity {
                 recyclerView.setHasFixedSize(true);
                 adapter.notifyDataSetChanged();
             }
-        },1500);
+        },2000);
 
 
 

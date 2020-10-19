@@ -19,6 +19,7 @@
             android:layout_height="50dp"
             android:background="#000000"
             android:text="홈"
+            android:textStyle="italic"
             android:textColor="#FFFFFF"
             android:textSize="17dp" />
 
@@ -39,6 +40,7 @@
             android:textColor="#FFFFFF"
             android:textSize="17dp"
             android:layout_marginRight="20dp"
+            android:textStyle="italic"
             android:text="결제" />
 
 

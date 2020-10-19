@@ -92,7 +92,7 @@ public class PaymentActivity extends AppCompatActivity {
                 tv_total.setText(String.valueOf(total) + "원");
 
             }
-        }, 1500);
+        }, 2000);
 
 
         // 결제에서 홈으로 이동
