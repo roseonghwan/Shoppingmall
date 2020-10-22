@@ -1,14 +1,12 @@
 package com.example.shoppingmall.Home;
 
-import android.app.AlertDialog;
+
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+
 import android.widget.ImageView;
 
 import android.widget.TextView;
@@ -72,7 +70,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView iv_image;
         TextView tv_name, tv_price;
-        Button btn_basket, btn_payment;
 
         public ViewHolder(@NonNull final View itemView) {
             super(itemView);

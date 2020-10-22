@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
-            // 파이어베이스 데이터베이스를 받아오는 것
+            // 파이어베이스 리얼타임 데이터베이스를 받아오는 것
             public void onDataChange(@NonNull DataSnapshot datasnapshot) {
                 arrayList.clear(); // 배열 초기화
                 for(DataSnapshot snapshot : datasnapshot.getChildren()){
